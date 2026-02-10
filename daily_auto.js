@@ -1,11 +1,10 @@
-require("dotenv").config(); // 👈 .env 파일을 불러오는 마법의 코드 (최상단 필수)
+require("dotenv").config();
 
 const axios = require("axios");
 const crypto = require("crypto");
 const { BigQuery } = require("@google-cloud/bigquery");
 
 // ==========================================
-// ⚙️ [설정] 이제 환경변수(process.env)에서 가져옵니다!
 const NAVER_CONFIG = {
   ACCESS_LICENSE: process.env.NAVER_ACCESS_LICENSE,
   SECRET_KEY: process.env.NAVER_SECRET_KEY,
@@ -19,7 +18,6 @@ const BQ_CONFIG = {
 };
 // ==========================================
 
-// (아래 코드는 그대로입니다)
 const bigquery = new BigQuery({ projectId: BQ_CONFIG.projectId });
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 

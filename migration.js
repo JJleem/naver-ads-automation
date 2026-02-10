@@ -1,11 +1,10 @@
-require("dotenv").config(); // 👈 환경변수 로드 (필수)
+require("dotenv").config();
 
 const axios = require("axios");
 const crypto = require("crypto");
 const { BigQuery } = require("@google-cloud/bigquery");
 
 // ==========================================
-// ⚙️ [설정] .env 파일에서 보안 키를 가져옵니다.
 const NAVER_CONFIG = {
   ACCESS_LICENSE: process.env.NAVER_ACCESS_LICENSE,
   SECRET_KEY: process.env.NAVER_SECRET_KEY,
@@ -18,7 +17,6 @@ const BQ_CONFIG = {
   tableId: process.env.BQ_TABLE_ID,
 };
 
-// ⚠️ 날짜 설정은 로직의 일부이므로 코드에 남겨둡니다 (필요시 수정해서 쓰세요)
 const START_DATE = "2025-01-01";
 const END_DATE = "2026-01-09";
 // ==========================================
@@ -65,7 +63,6 @@ async function insertToBigQueryWithRetry(rows, attempt = 1) {
       .table(BQ_CONFIG.tableId)
       .insert(rows);
   } catch (e) {
-    // 에러 내용을 정확히 봅니다.
     const errorMsg = e.errors ? JSON.stringify(e.errors) : e.message;
     console.error(`\n❌ [저장실패] ${attempt}차 시도 실패: ${errorMsg}`);
 
@@ -100,7 +97,6 @@ async function main() {
     const dateStr = currentDate.toISOString().split("T")[0];
     console.log(`\n📅 [${dateStr}] 작업 중...`);
 
-    // 초기화 (에러 나도 무시하고 진행)
     try {
       await bigquery.query(
         `DELETE FROM \`${BQ_CONFIG.projectId}.${BQ_CONFIG.datasetId}.${BQ_CONFIG.tableId}\` WHERE date = '${dateStr}'`,
